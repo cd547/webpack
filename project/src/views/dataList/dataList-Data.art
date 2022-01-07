@@ -1,0 +1,14 @@
+<%if(data){%>
+<% for(var i=0;i<data.length;i++){%>
+<tr>
+    <td><%=(i+1)+num%></td>
+    <td><img src="../../public/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3"><%=data[i].username%></td>
+    <td><%- format(data[i].add_time, 'YYYY-MM-DD hh:mm:ss')%></td>
+    <td>
+        <button type="button" data-id="<%=data[i]._id%>" class="btn btn-outline-info btn-sm">修改</button>
+        <button type="button" data-id="<%=data[i]._id%>" class="btn btn-outline-warning btn-sm">密码重置</button>
+        <button type="button" data-id="<%=data[i]._id%>" class="btn btn-outline-danger btn-sm remove-data">删除</button>
+    </td>
+</tr>
+<%}%>
+<%}%>

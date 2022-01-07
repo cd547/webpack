@@ -1,0 +1,90 @@
+<%if(data){%>
+    <% for(var i=0;i<data.length;i++){%>
+        <tr style="font-size: 13px;">
+            <td>
+                <%=(i+1)+num%>
+            </td>
+            <td style="font-size: 13px;">
+                <%=data[i]._id%>
+                    <%=data[i].itemname%>
+            </td>
+            <td style="font-size: 13px;WORD-WRAP: break-word">
+                <%=data[i].itemcun%>
+            </td>
+            <td  style="font-size: 13px;WORD-WRAP: break-word">
+                <%=data[i].itemaddress%>
+            </td>
+            <td style="font-size: small;">
+                <div style="float: left;"><span id="<%=data[i]._id%>_hr"></span></div>
+                <div style="float: left;margin-left: 5px;" id="<%=data[i]._id%>_hr_txt">
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                </div>
+            </td>
+            <td style="font-size: small;">
+                <div style="float: left;"><span id="<%=data[i]._id%>_dbp"></span></div>
+                <div style="float: left;margin-left: 5px;" id="<%=data[i]._id%>_dbp_txt">
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                </div>
+
+                <div style="float: left;margin-left: 15px;"><span id="<%=data[i]._id%>_sbp"></span></div>
+                <div style="float: left;margin-left: 5px;" id="<%=data[i]._id%>_sbp_txt">
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                    <p style="margin-bottom:0.1em;color: #333;"></p>
+                </div>
+            </td>
+
+        </tr>
+        <%}%>
+            <script src="<%=otherData.jsurl%>"></script>
+            <script>
+                var addtime = [];
+                <% for (var i = 0; i < data.length; i++) {%>
+                    addtime[<%=i %>]="<%- data[i].addtime%>".split(",");
+                    var $ps = $('#<%=data[i]._id%>_hr_txt p')
+                    var lastTime = addtime[<%= i %>][addtime[<%= i %>].length - 1]
+                    $($ps[0]).html(lastTime)
+                    $($ps[1]).html('心率范围：' + Math.min.apply(null,<%= data[i].hr %>) + '-' + Math.max.apply(null,<%= data[i].hr %>))
+                    $($ps[2]).html('心率：<%=data[i].hr[data[i].hr.length-1]%>');
+                    $ps = $('#<%=data[i]._id%>_dbp_txt p')
+                    $($ps[0]).html(lastTime)
+                    $($ps[1]).html('dbp范围：' + Math.min.apply(null,<%= data[i].dbp %>) + '-' + Math.max.apply(null,<%= data[i].dbp %>))
+                    $($ps[2]).html('dbp：<%=data[i].dbp[data[i].dbp.length-1]%>')
+                    $ps = $('#<%=data[i]._id%>_sbp_txt p')
+                    $($ps[0]).html(lastTime)
+                    $($ps[1]).html('sbp范围：' + Math.min.apply(null,<%= data[i].sbp %>) + '-' + Math.max.apply(null,<%= data[i].sbp %>))
+                    $($ps[2]).html('sbp：<%=data[i].sbp[data[i].sbp.length-1]%>')
+                    var sparkline1 = new Sparkline($("#<%=data[i]._id%>_hr")[0], {
+                        minValue: 0, maxValue: 250, height: 60, dotRadius: 0, lineColor: '#ff0047', endColor: '#ff4075', tooltip: (value, index, array) => {
+                            var $ps = $('#<%=data[i]._id%>_hr_txt p')
+                            $($ps[0]).html(addtime[<%= i %>][index])
+                            $($ps[2]).html('心率：' + value);
+                            return value.toFixed(0);
+                        }
+                    });
+                    sparkline1.draw(<%=data[i].hr %>);
+                    var sparkline2 = new Sparkline($("#<%=data[i]._id%>_dbp")[0], {
+                        minValue: 0, maxValue: 250, height: 60, dotRadius: 0, lineColor: '#4d00ff', endColor: '#8956FF', tooltip: (value, index, array) => {
+                            var $ps = $('#<%=data[i]._id%>_dbp_txt p')
+                            $($ps[0]).html(addtime[<%= i %>][index])
+                            $($ps[2]).html('dbp：' + value);
+                            return value.toFixed(0);
+                        }
+                    });
+                    sparkline2.draw(<%=data[i].dbp %>);
+                    var sparkline3 = new Sparkline($("#<%=data[i]._id%>_sbp")[0], {
+                        minValue: 0, maxValue: 250, height: 60, dotRadius: 0, lineColor: '#f56954', endColor: '#f56954', tooltip: (value, index, array) => {
+                            var $ps = $('#<%=data[i]._id%>_sbp_txt p')
+                            $($ps[0]).html(addtime[<%= i %>][index])
+                            $($ps[2]).html('sbp：' + value);
+                            return value.toFixed(0);
+                        }
+                    });
+                    sparkline3.draw(<%=data[i].sbp %>);
+                 <%}%>
+            </script>
+            <%}%>

@@ -1,0 +1,56 @@
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card" id="<%=modelName%>_dataList">
+            <div class="card-header">
+                <h3 class="card-title"><button type="button" id="<%=modelName%>_add_data_btn" class="btn btn-success btn-xs"
+                    data-toggle="modal" data-target="#<%=modelName%>_data_modal"><i class="fa fa-plus"></i> 添加数据</button></h3>
+                
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 200px;">
+                        <input type="text" id="<%=modelName%>_dataList_search" class="form-control float-right" placeholder="查询关键字">
+
+                        <div class="input-group-append">
+                            <button type="submit" id="<%=modelName%>_dataList_search_btn" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table class="table table-bordered table-hover" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                           <%- table_th %>
+                        </tr>
+                    </thead>
+                    <tbody id="<%=modelName%>_dataList_Data">
+                        
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="<%=modelName%>_dataPage_info">
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination pagination-sm m-0 float-right" id="<%=modelName%>_dataList_Pagination"></ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+
+    <!-- <script src="<%=jqpurl%>"></script> -->
+</div>
