@@ -90,8 +90,8 @@
     drawLine.call(this, x1, x2, line, x, y);
   }
 
-  function drawLine(x1, x2, style, x, y){
-    if(!style) return;
+  function drawLine(x1, x2, style, x, y) {
+    if (!style) return;
 
     this.context.save();
     this.context.strokeStyle = style.color || 'black';
@@ -104,28 +104,49 @@
     this.context.restore();
   }
 
+  var cacheCanvas = null
+  var lastEle = null
   function showTooltip(e) {
-   
+    //利用缓存提升性能
+    if (e.path[1] == lastEle) {
+      //console.log("==")
+      this.canvas.height = this.canvas.height;
+      this.context.drawImage(cacheCanvas, 0, 0)
+    }
+    else {
+      //console.log("!=")
+      if (lastEle) {
+        //清空上次的
+        var cav = lastEle.firstChild;
+        cav.height = cav.height;
+        cav.getContext('2d').drawImage(cacheCanvas, 0, 0)
+      }
+      cacheCanvas = document.createElement("canvas");
+      var ctx = cacheCanvas.getContext("2d");
+      ctx.drawImage(this.canvas, 0, 0)
+      //ctx.save();
+      lastEle = e.path[1];
+    }
+    //--利用缓存提升性能
     var x = e.offsetX || e.layerX || 0;
     var delta = ((this.options.width - this.options.dotRadius * 2) / (this.points.length - 1));
     var index = minmax(0, Math.round((x - this.options.dotRadius) / delta), this.points.length - 1);
-    
-    this.draw(this.points)
+
+    //this.draw(this.points)//普通更新画面
     //this.context.save();
     this.context.strokeStyle = this.options.lineColor;
     this.context.lineWidth = 2;
     this.context.globalAlpha = 1;
     this.context.beginPath();
-    var xi=(x+1)*(this.canvas.width/100)
+    var xi = (x + 1) * (this.canvas.width / 100)
     this.context.moveTo(xi, 0);
     this.context.lineTo(xi, this.canvas.height);
     this.context.stroke();
     this.context.beginPath();
     this.context.fillStyle = this.options.lineColor;
-    this.context.arc(xi, this.canvas.height-(this.points[index]/this.options.maxValue)*(this.canvas.height), 4, 0, Math.PI * 2, false);
+    this.context.arc(xi, this.canvas.height - (this.points[index] / this.options.maxValue) * (this.canvas.height), 4, 0, Math.PI * 2, false);
     this.context.fill();
-    this.context.restore();
-
+    //this.context.restore();
     this.canvas.title = this.options.tooltip(this.points[index], index, this.points);
   }
 
@@ -142,8 +163,8 @@
     this.canvas.style.height = pxHeight + 'px';
 
     var lineWidth = this.options.lineWidth * this.ratio;
-    var offsetX = Math.max(this.options.dotRadius * this.ratio, lineWidth/2);
-    var offsetY = Math.max(this.options.dotRadius * this.ratio, lineWidth/2);
+    var offsetX = Math.max(this.options.dotRadius * this.ratio, lineWidth / 2);
+    var offsetY = Math.max(this.options.dotRadius * this.ratio, lineWidth / 2);
     var width = this.canvas.width - offsetX * 2;
     var height = this.canvas.height - offsetY * 2;
 
@@ -169,7 +190,7 @@
     this.context.lineCap = 'round';
     this.context.lineJoin = 'round';
 
-    if(this.options.fillBelow && points.length > 1){
+    if (this.options.fillBelow && points.length > 1) {
       this.context.save();
       this.context.beginPath();
       this.context.moveTo(x, y(0));
@@ -181,15 +202,15 @@
 
         this.context.lineTo(x, y(i));
       }
-      this.context.lineTo(width+offsetX, height + offsetY + lineWidth/2);
-      this.context.lineTo(offsetX, height + offsetY + lineWidth/2);
+      this.context.lineTo(width + offsetX, height + offsetY + lineWidth / 2);
+      this.context.lineTo(offsetX, height + offsetY + lineWidth / 2);
       this.context.fill();
-      if(this.options.fillLighten > 0){
+      if (this.options.fillLighten > 0) {
         this.context.fillStyle = 'white';
         this.context.globalAlpha = this.options.fillLighten;
         this.context.fill();
         this.context.globalAlpha = 1;
-      }else if(this.options.fillLighten < 0){
+      } else if (this.options.fillLighten < 0) {
         this.context.fillStyle = 'black';
         this.context.globalAlpha = -this.options.fillLighten;
         this.context.fill();
@@ -209,10 +230,10 @@
     this.context.restore();
 
     line(this.options.bottomLine, 0, offsetY);
-    line(this.options.topLine, 0, height + offsetY+lineWidth/2);
+    line(this.options.topLine, 0, height + offsetY + lineWidth / 2);
 
     dot(this.options.startColor, this.options.startLine, offsetX + (points.length == 1 ? width / 2 : 0), y(0));
-    dot(this.options.endColor, this.options.endLine, offsetX + (points.length == 1 ? width / 2 : width), y(points.length-1));
+    dot(this.options.endColor, this.options.endLine, offsetX + (points.length == 1 ? width / 2 : width), y(points.length - 1));
     dot(this.options.minColor, this.options.minLine, minX + (points.length == 1 ? width / 2 : 0), y(points.indexOf(minValue)));
     dot(this.options.maxColor, this.options.maxLine, maxX + (points.length == 1 ? width / 2 : 0), y(points.indexOf(maxValue)));
 
