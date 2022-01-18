@@ -12,7 +12,7 @@ const records = (router,headerContext) => {
     let record_dataEditUrl=""//更新api
     let record_dataFindUrl=""
     //init()
-   let a= listData(modelName,record_dataList_DataTpl,record_table_thsTpl({}),record_data_modalLabel,g_pageSize,record_dataPagUrl,record_dataRemoveUrl,record_dataAddUrl,null,record_dataEditUrl,null,record_dataFindUrl,["search"],{jsurl:"https://cdn.jsdelivr.net/gh/cd547/webpack/project/src/public/plugins/sparklines/sparkline.js"})
+   let a= listData(modelName,record_dataList_DataTpl,record_table_thsTpl({}),record_data_modalLabel,g_pageSize,record_dataPagUrl,record_dataRemoveUrl,record_dataAddUrl,null,record_dataEditUrl,null,record_dataFindUrl,["search"],{jsurl:"https://cdn.jsdelivr.net/gh/cd547/webpack/project/dist/public/plugins/sparklines/sparkline.js"})
    return a
 }
 

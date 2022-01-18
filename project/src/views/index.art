@@ -226,5 +226,5 @@
 </div>
 <!-- ./wrapper -->
 
-<script src="https://cdn.jsdelivr.net/gh/cd547/webpack/project/src/public/plugins/jq-paginator/jq-paginator.min.js
+<script src="https://cdn.jsdelivr.net/gh/cd547/webpack/project/dist/public/plugins/jq-paginator/jq-paginator.min.js
 "></script>
