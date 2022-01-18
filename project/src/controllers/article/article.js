@@ -19,10 +19,10 @@ const article = (router,headerContext) => {
     let otherData={
         indexName:"title",
         loginUserName:localStorage.getItem("login-user"),
-        wysiwyg_css:"./public/plugins/wysiwyg-editor/css/froala_editor.pkgd.min.css",
-        wysiwyg_js:"./public/plugins/wysiwyg-editor/js/froala_editor.pkgd.min.js",
-        wysiwyg_lang:"./public/plugins/wysiwyg-editor/js/languages/zh_cn.js",
-        fileUpload_js:"./public/plugins/bs-custom-file-input/bs-custom-file-input.min.js",
+        wysiwyg_css:"https://cdn.jsdelivr.net/gh/cd547/webpack/project/src/public/plugins/wysiwyg-editor/css/froala_editor.pkgd.min.css",
+        wysiwyg_js:"https://cdn.jsdelivr.net/gh/cd547/webpack/project/src/public/plugins/wysiwyg-editor/js/froala_editor.pkgd.min.js",
+        wysiwyg_lang:"https://cdn.jsdelivr.net/gh/cd547/webpack/project/src/public/plugins/wysiwyg-editor/js/languages/zh_cn.js",
+        fileUpload_js:"https://cdn.jsdelivr.net/gh/cd547/webpack/project/src/public/plugins/bs-custom-file-input/bs-custom-file-input.min.js",
         uploadPicUrl:"http://101.34.125.200:3547/api/v1/article/uploadPic?token="+localStorage.getItem("login-token")
     }
 
