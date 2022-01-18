@@ -30,7 +30,24 @@ const dataAdd =async (url,data) => {
         let  { result } = await http({
             url: url,
             type:"post",
-            data:data
+            data:data,
+        })
+        return result
+    }
+    catch (err) {
+       // console.log(err)
+        return err
+    }
+}
+const dataAdd_file =async (url,data) => {
+    try {
+        let  { result } = await http({
+            url: url,
+            type:"post",
+            data:data,
+            cache: false,
+            processData: false,
+            contentType: false,
         })
         return result
     }
@@ -68,10 +85,61 @@ const dataSchema =async (url) => {
     }
 }
 
+const dataFindOne =async (url,data) => {
+    try {
+        let  { result } = await http({
+            url: url,
+            type:"post",
+            data:data,
+        })
+        return result
+    }
+    catch (err) {
+       // console.log(err)
+        return err
+    }
+}
+
+const dataEdit =async (url,data) => {
+    try {
+        let  { result } = await http({
+            url: url,
+            type:"put",
+            data:data,
+        })
+        return result
+    }
+    catch (err) {
+       // console.log(err)
+        return err
+    }
+}
+const dataEdit_file =async (url,data) => {
+    try {
+        let  { result } = await http({
+            url: url,
+            type:"put",
+            data:data,
+            cache: false,
+            processData: false,
+            contentType: false,
+        })
+        return result
+    }
+    catch (err) {
+       // console.log(err)
+        return err
+    }
+}
+
 export {
     dataList,
     dataListPagination,
     dataAdd,
+    dataAdd_file,
+    dataFindOne,
+    dataEdit,
+    dataEdit_file,
     dataRemove,
     dataSchema
 }

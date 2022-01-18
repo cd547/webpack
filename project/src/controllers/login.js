@@ -14,6 +14,7 @@ const _doLogin = (router) => {
                 if (result.message == 'ok') {
                     const token = jqXHR.getResponseHeader('X-Access-Token')
                     localStorage.setItem("login-token", token)
+                    localStorage.setItem("login-user",result.data.username)
                     router.go('/index');
                 }
                 else {
@@ -22,7 +23,7 @@ const _doLogin = (router) => {
                 }
             }
             else {
-    
+
                 toastr.warning(result.data);
                 // router.go('/');
             }
@@ -34,13 +35,14 @@ const _doLogin = (router) => {
 }
 
 //登录
-const login = (router) => {
+const login = (router,socket) => {
     console.log("clogin")
     return (req, res) => {
-        $(window,".wrapper").resize()
-        $("body").attr("class", "hold-transition login-page");
+        console.log(socket)
+        if(socket!=undefined){socket.disconnect()}    
+        $(window, ".wrapper").resize()
+        $("body").attr("class", "hold-transition login-page")
         res.render(loginTpl({}))
-        
         $('#login-form').on('submit', _doLogin(router))
     }
 }

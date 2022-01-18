@@ -12,17 +12,26 @@
 //         $table.html(tableTpl({ data: data, num: num,format:sd.format,otherData:obj}));
 //         _bindEvent(tableName,$table,removeClassName) 
 // }
-const table=(tableName,$table,tableTpl,tplData,removeClassName)=>{
+const table=(tableName,$table,tableTpl,tplData,removeClassName,editClassName)=>{
    let { data, num, format, otherData }=tplData
-    $table.html(tableTpl({data, num, format, otherData}));
-    _bindEvent(tableName,$table,removeClassName) 
+    $table.html(tableTpl({modelName:tableName,data, num, format, otherData}));
+    _bindEvent(tableName,$table,removeClassName,editClassName,otherData.indexName) 
+   // console.log(otherData.deleteNam)
 }
-const _bindEvent=(tableName,$table,removeClassName)=>{
+const _bindEvent=(tableName,$table,removeClassName,editClassName,indexName=null)=>{
+    //console.log(deleteName)
     //删除,先解除删除按钮的绑定事件
     $table.off('click', removeClassName).on('click', removeClassName, function (e) {
         e.preventDefault();
         //通知外部有数据删除
-        $('body').trigger("deletedata_"+tableName,$(this).data('id') )
+        $('body').trigger("deletedata_"+tableName,[$(this).data('id'),indexName] )
     })
+    //编辑
+    $table.off('click', editClassName).on('click', editClassName, function (e) {
+        e.preventDefault();
+        //通知外部有数据更新
+        $('body').trigger("editdataModal_"+tableName,[$(this).data('id'),indexName] )
+    })
+
 }
 export default table

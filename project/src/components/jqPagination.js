@@ -1,4 +1,4 @@
-import '../public/plugins/jq-paginator/jq-paginator.min.js'
+//import '../public/plugins/jq-paginator/jq-paginator.min.js'
 //$pagination:分页容器的节点
 //tableName:切换页码的触发事件名
 let jqInit = ($pagination,totalPages,visiblePages,currentPage,tableName)=>{

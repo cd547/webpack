@@ -1,7 +1,7 @@
 import '../../public/plugins/jq-paginator/jq-paginator.min.js'
 import { auth as authModel } from "../../models/authModel"
 import dataListTpl from '../../views/dataList/dataList.art'//整体页面
-import { addData } from './addData'
+import { addData, editData } from './data_CU'
 import { dataListPagination as dataListPagModel, dataRemove as dataRemoveModel, dataSchema as dataSchemaModel } from "../../models/dataModel"
 import dataTable from '../../components/table'//表格组件
 import { jqInit, jqDestory } from '../../components/jqPagination'//分页组件
@@ -14,8 +14,13 @@ let g_pageSize = 5 //每页显示多少
 let dataPagUrl = null
 let dataRemoveUrl = null
 let dataAddUrl = null
+let dataEditUrl = null
+let dataFindUrl=null
 let table_thsTpl = null
-let g_otherData=null
+let g_otherData = null
+let addFormTpl = null
+let editFormTpl = null
+
 ///////////////////////////////////////////////////
 
 let $jqPag
@@ -39,7 +44,7 @@ const _loadData = async (currentPage, pagesize, queryString = "",) => {
                 g_currentPage = currentPage
                 g_dataLength = result.data.length || 0
                 g_pageSize = pagesize
-                dataTable(modelName, $table, dataList_DataTpl,{ data: result.data, num: (result.page - 1) * result.pageSize, format: sd.format, otherData: g_otherData }, ".remove-data")
+                dataTable(modelName, $table, dataList_DataTpl, { data: result.data, num: (result.page - 1) * result.pageSize, format: sd.format, otherData: g_otherData }, ".remove-data", ".edit-data")
                 jqInit($jqPag, Number(result.totalPages), 5, Number(result.page), modelName)
                 $("#" + modelName + "_dataPage_info").html("查询关键字\"" + g_queryString + "\" 共" + result.totalPages + "页/" + result.total + "条");
             }
@@ -65,21 +70,22 @@ const _subscribe = () => {
     //用户添加
     $('body').off("addData_" + modelName).on('addData_' + modelName, (e, index) => {
         g_currentPage = 1
+        console.log('adderror')
         jqDestory($jqPag)
         _loadData(g_currentPage, g_pageSize, g_queryString);
     })
-    //用户删除
-    $('body').off("deletedata_" + modelName).on('deletedata_' + modelName, async (e, index) => {
+    //删除
+    $('body').off("deletedata_" + modelName).on('deletedata_' + modelName, async (e, index, deleteName) => {
         console.log("deletedata_" + modelName)
         let data = { id: index }
         try {
             let result = await dataRemoveModel(dataRemoveUrl, data)
             if (result.message != "ok") {
-                toastr.error('删除失败，或者数据以不存在')
-                return
+                toastr.error('删除失败，或者数据已不存在'+result.message)
             }
             else {
-                toastr.success("删除" + result.data.username + "成功")
+                console.log(result.data, deleteName)
+                toastr.success("删除" + result.data[deleteName] + "成功")
             }
             const currentPage_totle = g_totalPage == g_currentPage;
             const lastPageRestList = g_dataLength == 1;
@@ -94,6 +100,18 @@ const _subscribe = () => {
             console.log(e)
             toastr.error(e.statusText)
         }
+    })
+    //更新模态框弹出
+    $('body').off("editdataModal_" + modelName).on('editdataModal_' + modelName, async (e, index, editName) => {
+        //查询数据
+        
+        editData(modelName, index, data_modalLabel, editFormTpl, dataFindUrl,dataEditUrl, g_otherData)
+    })
+    //用户更新
+    $('body').off("editData_" + modelName).on('editData_' + modelName, (e, index) => {
+        console.log('editerror')
+        jqDestory($jqPag)
+        _loadData(g_currentPage, g_pageSize, g_queryString);
     })
     //页码切换
     $('body').off("jqPagPageChange_" + modelName).on('jqPagPageChange_' + modelName, async (e, param) => {
@@ -124,7 +142,7 @@ const _subscribe = () => {
                         }
                         else {
                             //直接渲染表格
-                            dataTable(modelName, $table, dataList_DataTpl,{ data: result.data, num: (result.page - 1) * result.pageSize, format: sd.format, otherData: g_otherData },".remove-data")
+                            dataTable(modelName, $table, dataList_DataTpl, { data: result.data, num: (result.page - 1) * result.pageSize, format: sd.format, otherData: g_otherData }, ".remove-data",".edit-data")
                             g_dataLength = result.data.length
                             $("#" + modelName + "_dataPage_info").html("查询关键字\"" + g_queryString + "\" 共" + result.totalPages + "页/" + result.total + "条");
                         }
@@ -139,25 +157,34 @@ const _subscribe = () => {
     })
 }
 
-const _motheds = () => {
+const _motheds = {
     //添加按钮
-    $('#' + modelName + '_add_data_btn').off("click").on("click", addData(modelName, data_modalLabel, dataAddUrl))
-    //搜索
-    $('#' + modelName + '_dataList_search_btn').off("click").on("click", function () {
-        let keyword = $('#' + modelName + '_dataList_search').val()
-        console.log(keyword)
-        if (new RegExp(/\\/).test(keyword)) {
-            toastr.warning("请不要包含特殊字符")
-            return
-        }
-        g_queryString = ""
-        g_currentPage = 1
-        if (keyword) {
-            g_queryString = keyword.replace(/\*/g, "\\*")
-        }
-        _loadData(g_currentPage, g_pageSize, g_queryString)
-        $('#' + modelName + '_dataList_search').val('')
-    })
+    add: () => {
+        $('#' + modelName + '_add_data_btn').off("click").on("click", addData(modelName, data_modalLabel, addFormTpl, dataAddUrl, g_otherData))
+    },
+    search: () => {
+        //搜索
+        $('#' + modelName + '_dataList_search_btn').off("click").on("click", function () {
+            let keyword = $('#' + modelName + '_dataList_search').val()
+            console.log(keyword)
+            if (new RegExp(/\\/).test(keyword)) {
+                toastr.warning("请不要包含特殊字符")
+                return
+            }
+            g_queryString = ""
+            g_currentPage = 1
+            if (keyword) {
+                g_queryString = keyword.replace(/\*/g, "\\*")
+            }
+            _loadData(g_currentPage, g_pageSize, g_queryString)
+            $('#' + modelName + '_dataList_search').val('')
+        })
+    },
+    init:()=>{
+
+    }
+
+
 }
 /**
  * router
@@ -169,10 +196,11 @@ const _motheds = () => {
  * @param {*} i_dataPagUrl 分页api
  * @param {*} i_dataRemoveUrl 删除api
  * @param {*} i_dataAddUrl 添加api
+ * @param {*} i_addFormTpl 添加页面模板
+ * @param {*} i_eventsdata 用到事件
  * @param {*} i_otherData 数据模板中的其他数据
-
  */
-const listData = (i_modelName, i_dataList_DataTpl, i_table_thsTpl, i_data_modalLabel, i_g_pageSize, i_dataPagUrl, i_dataRemoveUrl, i_dataAddUrl,i_otherData=null) => {
+const listData = (i_modelName, i_dataList_DataTpl, i_table_thsTpl, i_data_modalLabel, i_g_pageSize, i_dataPagUrl, i_dataRemoveUrl, i_dataAddUrl, i_addFormTpl, i_dataEditUrl, i_editFormTpl,i_dataFindUrl, i_eventsdata, i_otherData = null) => {
     return async (req, res, next) => {
         try {
             let result = await authModel()
@@ -182,24 +210,37 @@ const listData = (i_modelName, i_dataList_DataTpl, i_table_thsTpl, i_data_modalL
                 res.go("/login")
             }
             else {
+                console.log("loading..")
                 dataList_DataTpl = i_dataList_DataTpl
                 modelName = i_modelName
                 data_modalLabel = i_data_modalLabel
                 g_pageSize = i_g_pageSize
                 dataPagUrl = i_dataPagUrl
                 dataRemoveUrl = i_dataRemoveUrl
+                dataFindUrl=i_dataFindUrl
                 dataAddUrl = i_dataAddUrl
+                dataEditUrl = i_dataEditUrl
                 table_thsTpl = i_table_thsTpl
+                addFormTpl = i_addFormTpl
+                editFormTpl = i_editFormTpl
                 g_queryString = ""
                 g_currentPage = 1
-                g_otherData=i_otherData
-                res.render(dataListTpl({ modelName: modelName, table_th: table_thsTpl }))
+                g_otherData = i_otherData
+                let events = {}
+                for (var i = 0; i < i_eventsdata.length; i++) {
+                    events[i_eventsdata[i]] = true
+                }
+                let html = dataListTpl({ modelName: modelName, table_th: table_thsTpl, need_add: events.add })
+                res.render(html)
+                //
+                console.log("loaded")
                 $jqPag = $('#' + modelName + '_dataList_Pagination')
                 $table = $('#' + modelName + '_dataList_Data')
                 _loadData(g_currentPage, g_pageSize, g_queryString)
                 _subscribe()
                 //事件绑定
-                _motheds()
+                for (var i = 0; i < i_eventsdata.length; i++) { _motheds[i_eventsdata[i]](); }
+
             }
         }
         catch (e) {

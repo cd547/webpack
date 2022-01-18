@@ -2,7 +2,7 @@ import http from '../utils/http'
 const auth = async () => {
     try {
         let { result } = await http({
-            url: "/api/v1/users/isAuth"
+            url: "http://101.34.125.200:3547/api/v1/users/isAuth"
         })
         return result
     }

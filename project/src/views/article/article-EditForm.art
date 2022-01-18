@@ -1,0 +1,112 @@
+<div class="modal fade" id="<%=modelName%>_dataEdit_modal" data-backdrop="static" tabindex="-1" role="dialog"
+  aria-labelledby="<%=modelName%>_dataEdit_modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="<%=modelName%>_dataEdit_modalLabel">
+          更新 <%=data_modalLabel%>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="<%=modelName%>_dataEdit_form" class="form-horizontal" enctype="multipart/form-data">
+          <input type="hidden" name="id" value="<%=findData._id%>">
+          <input type="hidden" name="loginUserName" value="<%=otherData.loginUserName%>">
+          <div class="card-body">
+            <div class="form-group row">
+              <label for="title_edit" class="col-sm-2 col-form-label">标题</label>
+              <div class="col-sm-10">
+                <input type="text" name="title" class="form-control" id="title_edit" value="<%=findData.title%>"
+                  placeholder="标题">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="link_edit" class="col-sm-2 col-form-label">链接地址</label>
+              <div class="col-sm-10">
+                <input type="text" name="link" class="form-control" id="link_edit" placeholder="链接地址"
+                  value="<%=findData.link%>">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="article_img_edit" class="col-sm-2 col-form-label">封面图片</label>
+              <div class="col-sm-10">
+             
+                <div class="input-group">
+
+                  <%if(!!findData.article_img){%>
+                    <img src="http://101.34.125.200:3547/<%=findData.article_img%>" class="img-thumbnail">
+                    <input type="hidden" name="p_article_img" value="<%=findData.article_img%>">
+                    <%}%>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="article_img_edit" name="article_img" value="">
+                    <label class="custom-file-label" for="article_img_edit">选择文件</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="author_edit" class="col-sm-2 col-form-label">作者</label>
+              <div class="col-sm-10">
+                <input type="text" name="author" class="form-control" id="author_edit" placeholder="作者"
+                  value="<%=findData.author%>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="keywords_edit" class="col-sm-2 col-form-label">关键字</label>
+              <div class="col-sm-10">
+                <input type="text" name="keywords" class="form-control" id="keywords_edit" placeholder="关键字"
+                  value="<%=findData.keywords%>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="description_edit" class="col-sm-2 col-form-label">描述</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" name="description" id="description_edit" rows="2"
+                  placeholder="描述"><%=findData.description%></textarea>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="is_hot_edit_0" class="col-sm-2 col-form-label">是否热门</label>
+              <div class="col-sm-10">
+                <input type="radio" name="is_hot" id="is_hot_edit_0" <% if(findData.is_hot==0){%>checked<%}%> value=0>否
+                <input type="radio" name="is_hot" id="is_hot_edit_1" <% if(findData.is_hot==1){%>checked<%}%> value=1>是
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="a_content" class="col-sm-2 col-form-label">内容</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" name="content" id="a_content_edit"><%- findData.content%></textarea>
+
+              </div>
+            </div>
+
+          </div>
+          <!-- /.card-footer -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+          id="<%=modelName%>_dataEdit_modal_close">关闭</button>
+        <button type="button" class="btn btn-primary" id="<%=modelName%>_dataEdit_save">修改</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+      bsCustomFileInput.init();
+    });
+
+    new FroalaEditor('#a_content_edit', {
+      height: 300,
+      language: 'zh_cn',
+      imageUploadURL: '<%=otherData.uploadPicUrl%>&id=<%=findData._id%>',
+      imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
+      videoInsertButtons: ['videoBack', '|'],
+      quickInsertButtons: ['image', 'table', 'ul', 'ol', 'hr'] //快速插入
+    });
+  </script>
+</div>

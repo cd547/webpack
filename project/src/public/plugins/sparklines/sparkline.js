@@ -104,17 +104,19 @@
     this.context.restore();
   }
 
-  var cacheCanvas = null
+  var cacheCanvas = null//缓存canvas
   var lastEle = null
   function showTooltip(e) {
     //利用缓存提升性能
     if (e.path[1] == lastEle) {
+      //如是同一个图利用缓存
       //console.log("==")
       this.canvas.height = this.canvas.height;
       this.context.drawImage(cacheCanvas, 0, 0)
     }
     else {
       //console.log("!=")
+      //是新图，先把之前的图片（如果有）清空，并恢复原图。然后建立缓存
       if (lastEle) {
         //清空上次的
         var cav = lastEle.firstChild;

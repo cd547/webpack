@@ -3,7 +3,7 @@ import http from '../utils/http'
 const usersList =async () => {
     try {
         let  { result } = await http({
-            url: "/api/v1/users/"
+            url: "http://101.34.125.200:3547/api/v1/users/"
         })
         return result
     }
@@ -16,7 +16,7 @@ const usersList =async () => {
 const usersListPagination =async (querydata) => {
     try {
         let  { result } = await http({
-            url: "/api/v1/users/usersPag?"+querydata
+            url: "http://101.34.125.200:3547/api/v1/users/usersPag?"+querydata
         })
         return result
     }
@@ -28,7 +28,7 @@ const usersListPagination =async (querydata) => {
 const usersAdd =async (data) => {
     try {
         let  { result } = await http({
-            url: "/api/v1/users/",
+            url: "http://101.34.125.200:3547/api/v1/users/",
             type:"post",
             data:data
         })
@@ -43,7 +43,7 @@ const usersAdd =async (data) => {
 const usersRemove=async (data) => {
     try {
         let  { result } = await http({
-            url: "/api/v1/users/",
+            url: "http://101.34.125.200:3547/api/v1/users/",
             type:"delete",
             data:data
         })

@@ -1,8 +1,8 @@
 import http from '../utils/http'
 const login =async (data) => {
     try {
-        let { result,jqXHR } = await http({
-            url: "/api/v1/users/doLogin",
+        let { result,textStatus,jqXHR } = await http({
+            url: "http://101.34.125.200:3547/api/v1/users/doLogin",
             type:"post",
             data:data
         })
@@ -17,7 +17,7 @@ const login =async (data) => {
 const loginOut=async ()=>{
     try {
         let { result,jqXHR } = await http({
-            url: "/api/v1/users/doLoginOut",
+            url: "http://101.34.125.200:3547/api/v1/users/doLoginOut",
         })
         return result
     }
