@@ -36,7 +36,7 @@ const index = (router, socket, headerContext) => {
 
                 //let isconnect=$('#sk').html()
 
-                if (socket == undefined) {
+                if (socket === undefined) {
                     console.log(socket)
                     socket = io.connect("http://101.34.125.200:3547", {
                         query: 'token=' + localStorage.getItem("login-token")
@@ -98,7 +98,7 @@ const index = (router, socket, headerContext) => {
                                 localStorage.removeItem('login-token');
                                 localStorage.removeItem("login-user")
                                 console.log(socket)
-                                if (socket != undefined) {
+                                if (socket !== undefined) {
                                     socket.disconnect()
                                     socket = undefined
                                 }

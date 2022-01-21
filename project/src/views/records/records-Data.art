@@ -40,9 +40,9 @@
 
         </tr>
         <%}%>
-            <script src="<%=otherData.jsurl%>"></script>
             <script>
-                var addtime = [];
+                 $.getScript("<%=otherData.jsurl%>", function () {
+                    var addtime = [];
                 <% for (var i = 0; i < data.length; i++) {%>
                     addtime[<%=i %>]="<%- data[i].addtime%>".split(",");
                     var $ps = $('#<%=data[i]._id%>_hr_txt p')
@@ -86,5 +86,7 @@
                     });
                     sparkline3.draw(<%=data[i].sbp %>);
                  <%}%>
+                });
+
             </script>
             <%}%>

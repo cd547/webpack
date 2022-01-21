@@ -1,15 +1,15 @@
 <a href="#" class="dropdown-item">
   <!-- Message Start -->
   <div class="media">
-    <% if(!!msg.img ){%>
+    <% if(!!msg.img){%>
       <img src="http://101.34.125.200:3547/<%=msg.img%>" alt="User Avatar" class="img-size-50 img-circle mr-3">
     <%}%>
     <div class="media-body">
       <h3 class="dropdown-item-title">
-        <%=msg.title%>
+        <span class="text-sm" title="<%=msg.title%>"><%=(msg.title.slice(0,18))+((msg.title.length>=20)?"...":"")%></span>
         <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
       </h3>
-      <p class="text-sm"><%=msg.content%> </p>
+      <p class="text-sm"><%=msg.content%></p>
       <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> <%=msg.add_time%></p>
     </div>
   </div>

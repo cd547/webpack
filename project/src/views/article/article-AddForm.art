@@ -1,7 +1,4 @@
 <link href="<%=otherData.wysiwyg_css%>" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<%=otherData.wysiwyg_js%>"></script>
-<script type="text/javascript" src="<%=otherData.wysiwyg_lang%>"></script>
-<script type="text/javascript" src="<%=otherData.fileUpload_js%>"></script>
 
 <!-- Modal -->
 <div class="modal fade" id="<%=modelName%>_data_modal" data-backdrop="static" tabindex="-1" role="dialog"
@@ -40,7 +37,7 @@
               <div class="col-sm-10">
                 <div class="input-group">
                   <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="article_img" name="article_img" >
+                    <input type="file" class="custom-file-input" id="article_img" name="article_img">
                     <label class="custom-file-label" for="article_img">选择文件</label>
                   </div>
                 </div>
@@ -67,8 +64,8 @@
             <div class="form-group row">
               <label for="is_hot_0" class="col-sm-2 col-form-label">是否热门</label>
               <div class="col-sm-10">
-                  <input type="radio"  name="is_hot" id="is_hot_0" checked value=0>否
-                  <input type="radio"  name="is_hot" id="is_hot_1" value=1>是
+                <input type="radio" name="is_hot" id="is_hot_0" checked value=0>否
+                <input type="radio" name="is_hot" id="is_hot_1" value=1>是
               </div>
             </div>
 
@@ -92,23 +89,30 @@
     </div>
   </div>
   <script>
-    $(function () {
+    //  $(function () {
+    //    bsCustomFileInput.init();
+    //  });
+    $.getScript("<%=otherData.fileUpload_js%>", function () {
       bsCustomFileInput.init();
     });
-    
-      new FroalaEditor('#a_content', {
-        height: 300,
-        language: 'zh_cn',
-        //imageUploadURL:'<%=otherData.uploadPicUrl%>',
-        pluginsEnabled: ['charCounter', 'codeBeautifier', 'codeView', 'colors', 'draggable', 'emoticons', 'entities', 'fontAwesome', 'fontFamily', 
-        'fontSize', 'fullscreen', 'inlineStyle', 'inlineClass', 'lineBreaker', 'lineHeight', 'link', 'lists', 'paragraphFormat', 'paragraphStyle'
-        , 'quickInsert', 'quote', 'save', 'table', 'url', 'wordPaste'],
-        imageInsertButtons: ['imageBack', '|'],
-        videoInsertButtons: ['videoBack', '|'], 
-        /*
-        imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
-        videoInsertButtons: ['videoBack', '|', 'videoByURL'],*/ 
-        quickInsertButtons: ['table', 'ul', 'ol', 'hr'] //快速插入
+    $.getScript("<%=otherData.wysiwyg_js%>", function () {
+      $.getScript("<%=otherData.wysiwyg_lang%>", function () {
+        new FroalaEditor('#a_content', {
+          height: 300,
+          language: 'zh_cn',
+          //imageUploadURL:'<%=otherData.uploadPicUrl%>',
+          pluginsEnabled: ['charCounter', 'codeBeautifier', 'codeView', 'colors', 'draggable', 'emoticons', 'entities', 'fontAwesome', 'fontFamily',
+            'fontSize', 'fullscreen', 'inlineStyle', 'inlineClass', 'lineBreaker', 'lineHeight', 'link', 'lists', 'paragraphFormat', 'paragraphStyle'
+            , 'quickInsert', 'quote', 'save', 'table', 'url', 'wordPaste'],
+          imageInsertButtons: ['imageBack', '|'],
+          videoInsertButtons: ['videoBack', '|'],
+          /*
+          imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
+          videoInsertButtons: ['videoBack', '|', 'videoByURL'],*/
+          quickInsertButtons: ['table', 'ul', 'ol', 'hr'] //快速插入
+        });
       });
-    </script>
+    });
+
+  </script>
 </div>

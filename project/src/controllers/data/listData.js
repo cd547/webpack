@@ -239,7 +239,10 @@ const listData = (i_modelName, i_dataList_DataTpl, i_table_thsTpl, i_data_modalL
                 _loadData(g_currentPage, g_pageSize, g_queryString)
                 _subscribe()
                 //事件绑定
-                for (var i = 0; i < i_eventsdata.length; i++) { _motheds[i_eventsdata[i]](); }
+                for (var i = 0; i < i_eventsdata.length; i++) {
+                    console.log(i_eventsdata[i])
+                     _motheds[i_eventsdata[i]](); 
+                    }
 
             }
         }
